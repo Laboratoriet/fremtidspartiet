@@ -3,9 +3,9 @@
 import { InspectorDrawer } from '@/components/inspector/inspector-drawer'
 import { InspectorPanel } from '@/components/inspector/inspector-panel'
 import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup
 } from '@/components/ui/resizable'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 import { useMediaQuery } from '@/lib/hooks/use-media-query'
@@ -48,6 +48,7 @@ export function ChatArtifactContainer({
               'min-w-0',
               state.isOpen && 'transition-[flex-basis] duration-200 ease-out'
             )}
+            defaultSize={50}
           >
             {children}
           </ResizablePanel>
@@ -61,7 +62,7 @@ export function ChatArtifactContainer({
                 })}
                 maxSize={50}
                 minSize={30}
-                defaultSize={40}
+                defaultSize={50}
               >
                 <InspectorPanel />
               </ResizablePanel>

@@ -32,7 +32,7 @@ export default function GuestMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuItem asChild>
-          <Link href="/api/auth/signin">
+          <Link href="/auth/login">
             <LogIn className="mr-2 h-4 w-4" />
             <span>Sign In</span>
           </Link>

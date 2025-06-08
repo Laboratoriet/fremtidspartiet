@@ -1,32 +1,22 @@
 'use client'
 
-import { getCookie, setCookie } from '@/lib/utils/cookies'
+import { useSearchMode } from '@/lib/hooks/use-search-mode'
+import { cn } from '@/lib/utils'
 import { Globe } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 
 export function SearchModeToggle() {
-  const [isSearchMode, setIsSearchMode] = useState(true)
-
-  useEffect(() => {
-    const savedMode = getCookie('search-mode')
-    if (savedMode !== null) {
-      setIsSearchMode(savedMode === 'true')
-    } else {
-      setCookie('search-mode', 'true')
-    }
-  }, [])
-
-  const handleSearchModeChange = (pressed: boolean) => {
-    setIsSearchMode(pressed)
-    setCookie('search-mode', pressed.toString())
-  }
+  const [isSearchEnabled, setIsSearchEnabled] = useSearchMode()
 
   return (
     <Button
       variant="outline"
-      className="text-sm rounded-full shadow-none"
-      onClick={() => handleSearchModeChange(!isSearchMode)}
+      className={cn(
+        'text-sm rounded-full shadow-none',
+        isSearchEnabled &&
+          'bg-accent-blue text-accent-blue-foreground border-accent-blue-border'
+      )}
+      onClick={() => setIsSearchEnabled(!isSearchEnabled)}
     >
       <div className="flex items-center space-x-2">
         <Globe size={16} />

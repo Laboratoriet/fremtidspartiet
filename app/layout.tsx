@@ -70,11 +70,10 @@ export default async function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
           disableTransitionOnChange
         >
-          <SidebarProvider defaultOpen>
+          <SidebarProvider defaultOpen={false}>
             <AppSidebar />
             <div className="flex flex-col flex-1">
               <Header user={user} />

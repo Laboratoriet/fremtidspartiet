@@ -1,6 +1,7 @@
 'use client'
 
 import { CHAT_ID } from '@/lib/constants'
+import { useSearchMode } from '@/lib/hooks/use-search-mode'
 import { Model } from '@/lib/types/models'
 import { cn } from '@/lib/utils'
 import { useChat } from '@ai-sdk/react'
@@ -31,6 +32,7 @@ export function Chat({
 }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
+  const [isSearchEnabled] = useSearchMode()
 
   const {
     messages,
@@ -137,10 +139,17 @@ export function Chat({
   }, [id])
 
   const onQuerySelect = (query: string) => {
-    append({
-      role: 'user',
-      content: query
-    })
+    append(
+      {
+        role: 'user',
+        content: query
+      },
+      {
+        body: {
+          isSearchEnabled
+        }
+      }
+    )
   }
 
   const handleUpdateAndReloadMessage = async (
@@ -187,16 +196,26 @@ export function Chat({
       if (userMessageIndex !== -1) {
         const trimmedMessages = messages.slice(0, userMessageIndex + 1)
         setMessages(trimmedMessages)
-        return await reload(options)
+        return await reload({
+          ...options,
+          body: { ...options?.body, isSearchEnabled }
+        })
       }
     }
-    return await reload(options)
+    return await reload({
+      ...options,
+      body: { ...options?.body, isSearchEnabled }
+    })
   }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setData(undefined)
-    handleSubmit(e)
+    handleSubmit(e, {
+      body: {
+        isSearchEnabled
+      }
+    })
   }
 
   return (

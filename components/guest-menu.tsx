@@ -2,20 +2,20 @@
 
 import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import {
-  Link2,
-  LogIn,
-  Palette,
-  Settings2 // Or EllipsisVertical, etc.
+    Link2,
+    LogIn,
+    Palette,
+    Settings2
 } from 'lucide-react'
 import Link from 'next/link'
 import { ExternalLinkItems } from './external-link-items'
@@ -26,13 +26,13 @@ export default function GuestMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
-          <Settings2 className="h-5 w-5" /> {/* Choose an icon */}
+          <Settings2 className="h-5 w-5" />
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuItem asChild>
-          <Link href="/auth/login">
+          <Link href="/api/auth/signin">
             <LogIn className="mr-2 h-4 w-4" />
             <span>Sign In</span>
           </Link>

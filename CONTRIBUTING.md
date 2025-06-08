@@ -1,48 +1,69 @@
-# Contributing to Morphic
+# Contributing to Fremtidspartiet
 
-Thank you for your interest in contributing to Morphic! This document provides guidelines and instructions for contributing.
+Takk for at du vurderer å bidra til Fremtidspartiets digitale plattform!  
+Dette er et eksperiment i fremtidens politikk – og vi ønsker både tekniske og innholdsmessige bidrag.
 
-## Code of Conduct
+## 🌱 Hva slags bidrag vi ser etter
 
-By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md).
+- Funksjoner som forbedrer AI-dialogen (Veiviseren)
+- Forbedringer til medlemskapssystem eller bidragsportal
+- Tillegg eller rettelser til manifestinnhold og metadata
+- Tekniske optimaliseringer (RAG, Supabase, Pinecone, CMS)
+- Dokumentasjon og onboarding-forbedringer
 
-## How to Contribute
+---
 
-### Reporting Issues
+## 📌 Retningslinjer
 
-- Check if the issue already exists in our [GitHub Issues](https://github.com/miurla/morphic/issues)
-- Use the issue templates when creating a new issue
-- Provide as much context as possible
+### 💬 Åpne en idé eller sak
 
-### Pull Requests
+1. Se først om forslaget ditt allerede finnes under [Issues](../../issues)
+2. Hvis ikke, opprett en ny issue og velg riktig mal:
+   - Feature request
+   - Bug report
+   - Manifest-/tekstbidrag
 
-1. Fork the repository
-2. Create a new branch from `main`:
+👉 Vi foretrekker konkrete og forståelige beskrivelser. Lenker, skisser og kontekst er velkomment!
+
+---
+
+### 💠 Lage en Pull Request
+
+1. Lag en fork og ny branch fra `main`:
    ```bash
-   git checkout -b feat/your-feature-name
+   git checkout -b feat/navn-på-funksjon
    ```
-3. Make your changes
-4. Commit your changes using conventional commits:
+2. Gjør endringer og test lokalt
+3. Bruk [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
    ```bash
-   git commit -m "feat: add new feature"
+   git commit -m "feat: legg til ny seksjon i manifesteditor"
    ```
-5. Push to your fork
-6. Open a Pull Request
+4. Push og opprett en Pull Request
 
-### Commit Convention
+---
 
-We use conventional commits. Examples:
+### ✍️ Commit-eksempler
 
-- `feat: add new feature`
-- `fix: resolve issue with X`
-- `docs: update README`
-- `chore: update dependencies`
-- `refactor: improve code structure`
+- `feat: legg til støtte for Stripe-betaling`
+- `fix: feil i metadata-håndtering`
+- `docs: oppdater README og miljøvariabler`
+- `refactor: rydder i chunking-funksjon for Pinecone`
+- `chore: oppdater avhengigheter`
 
-### Development Setup
+---
 
-Follow the [Quickstart](README.md#-quickstart) guide in the README to set up your development environment.
+## 🔐 Etiske prinsipper
 
-## License
+Ved å bidra, godtar du at prosjektet:
 
-By contributing, you agree that your contributions will be licensed under the Apache-2.0 License.
+- Skal være åpent og tilgjengelig
+- Skal respektere personvern og datasikkerhet
+- Ikke brukes til partipolitisk skittkasting eller villedning
+
+Se også vår [Code of Conduct](CODE_OF_CONDUCT.md) for full oversikt.
+
+---
+
+## 📄 Lisens
+
+Ved å bidra, samtykker du til at endringer blir lisensiert under [Apache 2.0](LICENSE).

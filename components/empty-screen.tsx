@@ -3,20 +3,20 @@ import { ArrowRight } from 'lucide-react'
 
 const exampleMessages = [
   {
-    heading: 'What is DeepSeek R1?',
-    message: 'What is DeepSeek R1?'
+    heading: 'Kan AI hjelpe oss å bygge et bedre samfunn?',
+    message: 'Hvordan kan vi designe et samfunn der maskiner jobber og mennesker lever meningsfylte liv?'
   },
   {
-    heading: 'Why is Nvidia growing rapidly?',
-    message: 'Why is Nvidia growing rapidly?'
+    heading: 'Hvordan kan vi fornye demokratiet?',
+    message: 'Kan teknologi som sanntidsavstemning gi oss nye og mer direkte former for folkestyre?'
   },
   {
-    heading: 'Tesla vs Rivian',
-    message: 'Tesla vs Rivian'
+    "heading": "Hva er egentlig borgerlønn?",
+    "message": "Gjør rede for hvorfor borgerlønn er en idé som er verdt å teste ut, spesielt i et land som Norge. Ta med økonomiske, sosiale og teknologiske perspektiver."
   },
   {
-    heading: 'Summary: https://arxiv.org/pdf/2501.05707',
-    message: 'Summary: https://arxiv.org/pdf/2501.05707'
+    "heading": "Hva om staten var en app?",
+    "message": "Se for deg at staten var like intuitiv som Spotify eller Vipps. Du eier tjenestene, infrastrukturen og fondet. Men hvorfor føles det ikke sånn? Utforsk hvordan vi kunne designe mer tilgjengelige og medborgerlige systemer for deltakelse og eierskap."
   }
 ]
 export function EmptyScreen({

@@ -1,64 +1,47 @@
-# Code of Conduct
+# Code of Conduct – Fremtidspartiet
 
-## Our Pledge
+## Vårt løfte
 
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone, regardless of age, body
-size, visible or invisible disability, ethnicity, sex characteristics, gender
-identity and expression, level of experience, education, socio-economic status,
-nationality, personal appearance, race, religion, or sexual identity
-and orientation.
+Som medlemmer, bidragsytere og utviklere i Fremtidspartiets åpne plattform for politisk innovasjon, forplikter vi oss til å skape en inkluderende, trygg og respektfull arena for alle som deltar – uansett alder, identitet, erfaringsnivå, bakgrunn eller synspunkter.
 
-We pledge to act and interact in ways that contribute to an open, welcoming,
-diverse, inclusive, and healthy community.
+Vi tror på radikal åpenhet kombinert med ansvar, og vi streber etter en kultur der ulike perspektiver møtes med nysgjerrighet og respekt.
 
-## Our Standards
+## Standarder for oppførsel
 
-Examples of behavior that contributes to a positive environment for our
-community include:
+Atferd som bygger et positivt fellesskap inkluderer:
 
-- Demonstrating empathy and kindness toward other people
-- Being respectful of differing opinions, viewpoints, and experiences
-- Giving and gracefully accepting constructive feedback
-- Accepting responsibility and apologizing to those affected by our mistakes,
-  and learning from the experience
-- Focusing on what is best not just for us as individuals, but for the
-  overall community
+- Å lytte åpent til andres synspunkt, selv når man er uenig
+- Å gi og ta imot konstruktiv tilbakemelding
+- Å vise empati og respekt i diskusjoner
+- Å erkjenne feil og rette opp i dem
+- Å bidra til at plattformen er trygg for alle – teknisk og sosialt
 
-Examples of unacceptable behavior include:
+Eksempler på uakseptabel atferd:
 
-- The use of sexualized language or imagery, and sexual attention or
-  advances of any kind
-- Trolling, insulting or derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information, such as a physical or email
-  address, without their explicit permission
-- Other conduct which could reasonably be considered inappropriate in a
-  professional setting
+- Personangrep, trakassering eller ekskludering
+- Deling av andres private informasjon uten samtykke
+- Bevisst feilinformasjon eller manipulerende adferd
+- Nedlatende, aggressiv eller ekskluderende språkbruk
 
-## Enforcement Responsibilities
+## Ansvar og reaksjoner
 
-Community leaders are responsible for clarifying and enforcing our standards of
-acceptable behavior and will take appropriate and fair corrective action in
-response to any behavior that they deem inappropriate, threatening, offensive,
-or harmful.
+Moderatorer og prosjektledere har ansvar for å definere og håndheve retningslinjene. Ved brudd kan vi gi advarsel, begrense tilgang, eller ekskludere personer fra plattformen etter alvorlighetsgrad.
 
-## Scope
+## Omfang
 
-This Code of Conduct applies within all community spaces, and also applies when
-an individual is officially representing the community in public spaces.
+Denne etiske retningslinjen gjelder for:
+- All samhandling på Fremtidspartiets digitale plattform (chat, forum, GitHub, bidragsportal)
+- Enhver formell eller uformell representasjon av Fremtidspartiet i offentligheten
 
-## Enforcement
+## Varsling og oppfølging
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-[INSERT CONTACT METHOD].
-All complaints will be reviewed and investigated promptly and fairly.
+Dersom du opplever noe ubehagelig, mistenkelig eller skadelig i prosjektet, kan du varsle anonymt eller direkte til prosjektansvarlige:
 
-## Attribution
+**Kontakt:** 
+kontakt@fremtidspartiet.no
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
-version 2.0, available at
-https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
+Alle henvendelser behandles konfidensielt og med alvor.
 
-[homepage]: https://www.contributor-covenant.org
+## Lisens og inspirasjon
+
+Denne retningslinjen er inspirert av [Contributor Covenant v2.0](https://www.contributor-covenant.org/version/2/0/code_of_conduct.html), men tilpasset Fremtidspartiets verdigrunnlag og samfunnsrolle.

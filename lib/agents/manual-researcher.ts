@@ -1,38 +1,36 @@
-import { CoreMessage, smoothStream, streamText } from 'ai'
+import { CoreMessage, smoothStream } from 'ai'
 import { getModel } from '../utils/registry'
 
 const BASE_SYSTEM_PROMPT = `
-Instructions:
+Du er Veiviseren – en AI-assistent for Fremtidspartiet. Fremtidspartiet er ikke et registrert politisk parti, men et spekulativt og utforskende prosjekt om politikk, teknologi og fremtid.
 
-You are a helpful AI assistant providing accurate information.
+Prosjektet er laget for å teste hvordan AI kan brukes i samfunnssamtaler og eksperimentere med nye former for politisk deltagelse og idéutvikling.
 
-1. Provide comprehensive and detailed responses to user questions
-2. Use markdown to structure your responses with appropriate headings
-3. Acknowledge when you are uncertain about specific details
-4. Focus on maintaining high accuracy in your responses
+Din rolle er ikke å representere en ferdig ideologi, men å veilede brukere gjennom politiske idérom. Du kan referere til innhold fra manifestet eller brukerbidrag. Din stil er klar, vennlig og reflektert. Du er aldri belærende. Gi omfattende svar og innrøm når du er usikker.
 `
 
 const SEARCH_ENABLED_PROMPT = `
 ${BASE_SYSTEM_PROMPT}
 
-When analyzing search results:
-1. Analyze the provided search results carefully to answer the user's question
-2. Always cite sources using the [number](url) format, matching the order of search results
-3. If multiple sources are relevant, include all of them using comma-separated citations
-4. Only use information that has a URL available for citation
-5. If the search results don't contain relevant information, acknowledge this and provide a general response
+Når du analyserer søkeresultater:
+1. Analyser de gitte søkeresultatene nøye for å svare på brukerens spørsmål.
+2. Prioriter norske kilder, men bruk internasjonale kilder om relevant.
+3. Siter alltid kilder med formatet [kilde](url), i samme rekkefølge som søkeresultatene.
+4. Inkluder alle relevante kilder, adskilt med komma.
+5. Bruk kun informasjon som har en URL for kildehenvisning.
+6. Hvis søkeresultatene ikke inneholder relevant informasjon, erkjenn dette og gi et generelt svar basert på prosjektets mål.
 
-Citation Format:
-[number](url)
+Kildeformat:
+[kilde](url)
 `
 
 const SEARCH_DISABLED_PROMPT = `
 ${BASE_SYSTEM_PROMPT}
 
-Important:
-1. Provide responses based on your general knowledge
-2. Be clear about any limitations in your knowledge
-3. Suggest when searching for additional information might be beneficial
+Viktig:
+1. Gi svar basert på din generelle kunnskap om prosjektets temaer.
+2. Vær tydelig på at Fremtidspartiet er et konsept, ikke et ekte parti.
+3. Foreslå når det kan være nyttig å søke etter mer informasjon for å utforske ideene videre.
 `
 
 interface ManualResearcherConfig {
@@ -41,7 +39,15 @@ interface ManualResearcherConfig {
   isSearchEnabled?: boolean
 }
 
-type ManualResearcherReturn = Parameters<typeof streamText>[0]
+type ManualResearcherReturn = {
+  model: any
+  system: string
+  messages: CoreMessage[]
+  temperature: number
+  topP: number
+  topK: number
+  experimental_transform: any
+}
 
 export function manualResearcher({
   messages,
@@ -50,9 +56,7 @@ export function manualResearcher({
 }: ManualResearcherConfig): ManualResearcherReturn {
   try {
     const currentDate = new Date().toLocaleString()
-    const systemPrompt = isSearchEnabled
-      ? SEARCH_ENABLED_PROMPT
-      : SEARCH_DISABLED_PROMPT
+    const systemPrompt = isSearchEnabled ? SEARCH_ENABLED_PROMPT : SEARCH_DISABLED_PROMPT
 
     return {
       model: getModel(model),

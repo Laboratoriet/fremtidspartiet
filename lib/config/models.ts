@@ -1,11 +1,16 @@
 import { Model } from '@/lib/types/models'
 import { getBaseUrl } from '@/lib/utils/url'
-import defaultModels from './default-models.json'
+import defaultModelsData from './default-models.json'
+
+const defaultModels: { models: Model[] } = defaultModelsData as {
+  models: Model[]
+}
 
 export function validateModel(model: any): model is Model {
   return (
     typeof model.id === 'string' &&
     typeof model.name === 'string' &&
+    (model.description === undefined || typeof model.description === 'string') &&
     typeof model.provider === 'string' &&
     typeof model.providerId === 'string' &&
     typeof model.enabled === 'boolean' &&

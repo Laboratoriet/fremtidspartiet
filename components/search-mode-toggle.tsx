@@ -1,10 +1,9 @@
 'use client'
 
-import { cn } from '@/lib/utils'
 import { getCookie, setCookie } from '@/lib/utils/cookies'
 import { Globe } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Toggle } from './ui/toggle'
+import { Button } from './ui/button'
 
 export function SearchModeToggle() {
   const [isSearchMode, setIsSearchMode] = useState(true)
@@ -24,21 +23,15 @@ export function SearchModeToggle() {
   }
 
   return (
-    <Toggle
-      aria-label="Toggle search mode"
-      pressed={isSearchMode}
-      onPressedChange={handleSearchModeChange}
+    <Button
       variant="outline"
-      className={cn(
-        'gap-1 px-3 border border-input text-muted-foreground bg-background',
-        'data-[state=on]:bg-accent-blue',
-        'data-[state=on]:text-accent-blue-foreground',
-        'data-[state=on]:border-accent-blue-border',
-        'hover:bg-accent hover:text-accent-foreground rounded-full'
-      )}
+      className="text-sm rounded-full shadow-none"
+      onClick={() => handleSearchModeChange(!isSearchMode)}
     >
-      <Globe className="size-4" />
-      <span className="text-xs">Search</span>
-    </Toggle>
+      <div className="flex items-center space-x-2">
+        <Globe size={16} />
+        <span className="text-xs font-medium">Websøk</span>
+      </div>
+    </Button>
   )
 }

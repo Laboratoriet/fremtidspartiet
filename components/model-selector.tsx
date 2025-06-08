@@ -9,27 +9,12 @@ import { useEffect, useState } from 'react'
 import { createModelId } from '../lib/utils'
 import { Button } from './ui/button'
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
+    Command,
+    CommandEmpty,
+    CommandItem,
+    CommandList
 } from './ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-
-function groupModelsByProvider(models: Model[]) {
-  return models
-    .filter(model => model.enabled)
-    .reduce((groups, model) => {
-      const provider = model.provider
-      if (!groups[provider]) {
-        groups[provider] = []
-      }
-      groups[provider].push(model)
-      return groups
-    }, {} as Record<string, Model[]>)
-}
 
 interface ModelSelectorProps {
   models: Model[]
@@ -48,25 +33,30 @@ export function ModelSelector({ models }: ModelSelectorProps) {
       } catch (e) {
         console.error('Failed to parse saved model:', e)
       }
+    } else if (models.length > 0) {
+      // Set the first model as the default if no cookie is found
+      const defaultModel = models[0]
+      const defaultModelId = createModelId(defaultModel)
+      setValue(defaultModelId)
+      setCookie('selectedModel', JSON.stringify(defaultModel))
     }
-  }, [])
+  }, [models])
 
   const handleModelSelect = (id: string) => {
     const newValue = id === value ? '' : id
     setValue(newValue)
-    
+
     const selectedModel = models.find(model => createModelId(model) === newValue)
     if (selectedModel) {
       setCookie('selectedModel', JSON.stringify(selectedModel))
     } else {
       setCookie('selectedModel', '')
     }
-    
+
     setOpen(false)
   }
 
   const selectedModel = models.find(model => createModelId(model) === value)
-  const groupedModels = groupModelsByProvider(models)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -99,42 +89,40 @@ export function ModelSelector({ models }: ModelSelectorProps) {
       </PopoverTrigger>
       <PopoverContent className="w-72 p-0" align="start">
         <Command>
-          <CommandInput placeholder="Search models..." />
           <CommandList>
             <CommandEmpty>No model found.</CommandEmpty>
-            {Object.entries(groupedModels).map(([provider, models]) => (
-              <CommandGroup key={provider} heading={provider}>
-                {models.map(model => {
-                  const modelId = createModelId(model)
-                  return (
-                    <CommandItem
-                      key={modelId}
-                      value={modelId}
-                      onSelect={handleModelSelect}
-                      className="flex justify-between"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Image
-                          src={`/providers/logos/${model.providerId}.svg`}
-                          alt={model.provider}
-                          width={18}
-                          height={18}
-                          className="bg-white rounded-full border"
-                        />
-                        <span className="text-xs font-medium">
-                          {model.name}
-                        </span>
-                      </div>
-                      <Check
-                        className={`h-4 w-4 ${
-                          value === modelId ? 'opacity-100' : 'opacity-0'
-                        }`}
-                      />
-                    </CommandItem>
-                  )
-                })}
-              </CommandGroup>
-            ))}
+            {models.map(model => {
+              const modelId = createModelId(model)
+              return (
+                <CommandItem
+                  key={modelId}
+                  value={modelId}
+                  onSelect={handleModelSelect}
+                  className="flex items-start justify-between p-2"
+                >
+                  <div className="flex items-start space-x-3">
+                    <Image
+                      src={`/providers/logos/${model.providerId}.svg`}
+                      alt={model.provider}
+                      width={20}
+                      height={20}
+                      className="bg-white rounded-full border"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{model.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {model.description}
+                      </span>
+                    </div>
+                  </div>
+                  <Check
+                    className={`h-4 w-4 mt-1 ${
+                      value === modelId ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                </CommandItem>
+              )
+            })}
           </CommandList>
         </Command>
       </PopoverContent>

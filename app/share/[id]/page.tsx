@@ -29,7 +29,8 @@ export default async function SharePage(props: {
     return notFound()
   }
 
-  const models = await getModels()
+  const allModels = await getModels()
+  const models = allModels.filter(model => model.enabled)
   return (
     <Chat
       id={chat.id}

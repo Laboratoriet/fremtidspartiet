@@ -70,7 +70,7 @@ export function createManualToolStreamResponse(config: BaseStreamConfig) {
               chatId,
               dataStream,
               userId,
-              skipRelatedQuestions: true,
+              skipRelatedQuestions: false,
               annotations
             })
           },

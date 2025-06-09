@@ -116,7 +116,9 @@ export function ChatPanel({
     <div
       className={cn(
         'w-full bg-background group/form-container shrink-0',
-        messages.length > 0 ? 'sticky bottom-0 px-2 pb-4' : 'px-6'
+        messages.length > 0
+          ? 'sticky bottom-0 px-2 pb-4'
+          : 'px-6 flex flex-col justify-center h-full'
       )}
     >
       {messages.length === 0 && (

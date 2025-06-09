@@ -65,7 +65,7 @@ export function ModelSelector({ models }: ModelSelectorProps) {
     const IconComponent = model.icon ? iconMap[model.icon] : null
     if (IconComponent) {
       return (
-        <IconComponent className="mr-2 size-5 text-muted-foreground/80" />
+        <IconComponent className="mr-2 size-5 text-muted-foreground/80 mt-0.5" />
       )
     }
 
@@ -76,9 +76,9 @@ export function ModelSelector({ models }: ModelSelectorProps) {
       <Image
         src={`/providers/logos/${providerIcon}.svg`}
         alt={model.provider}
-        width={18}
-        height={18}
-        className="mr-2 bg-white rounded-full border"
+        width={20}
+        height={20}
+        className="mr-2 mt-0.5 bg-white rounded-full border"
       />
     )
   }
@@ -117,7 +117,7 @@ export function ModelSelector({ models }: ModelSelectorProps) {
                   key={modelId}
                   value={modelId}
                   onSelect={handleModelSelect}
-                  className="flex items-start justify-between p-2"
+                  className="flex items-center justify-between p-3"
                 >
                   <div className="flex items-start space-x-3">
                     {renderIcon(model)}
@@ -129,7 +129,7 @@ export function ModelSelector({ models }: ModelSelectorProps) {
                     </div>
                   </div>
                   <Check
-                    className={`h-4 w-4 mt-1 ${
+                    className={`h-4 w-4 ${
                       value === modelId ? 'opacity-100' : 'opacity-0'
                     }`}
                   />

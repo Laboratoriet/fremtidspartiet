@@ -33,9 +33,11 @@ export default async function SharePage(props: {
   const models = allModels.filter(model => model.enabled)
   return (
     <Chat
+      key={chat.id}
       id={chat.id}
       savedMessages={convertToUIMessages(chat.messages)}
       models={models}
+      user={null}
     />
   )
 }

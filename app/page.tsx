@@ -1,10 +1,11 @@
-import { Chat } from '@/components/chat'
+import { getCurrentUser } from '@/lib/auth/get-current-user'
 import { getModels } from '@/lib/config/models'
 import { generateId } from 'ai'
+import { Chat } from '../components/chat'
 
-export default async function Page() {
+export default async function IndexPage() {
   const id = generateId()
-  const allModels = await getModels()
-  const models = allModels.filter(model => model.enabled)
-  return <Chat id={id} models={models} />
+  const models = await getModels()
+  const user = await getCurrentUser()
+  return <Chat id={id} models={models} user={user} />
 }

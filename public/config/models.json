@@ -21,12 +21,12 @@
       "toolCallType": "native"
     },
     {
-      "id": "gemini-1.5-flash",
+      "id": "gpt-4.1",
       "name": "Analytisk",
       "description": "Best for problemløsning og komplekse spørsmål.",
       "icon": "microscope",
-      "provider": "Google Generative AI",
-      "providerId": "google",
+      "provider": "OpenAI",
+      "providerId": "openai",
       "enabled": true,
       "toolCallType": "native"
     }

@@ -46,7 +46,11 @@ export const UserMessage: React.FC<UserMessageProps> = ({
   return (
     <div className="flex justify-end">
       <div className="bg-muted rounded-lg p-3 max-w-2xl">
-        <CollapsibleMessage role="user" isCollapsible={false}>
+        <CollapsibleMessage
+          role="user"
+          isCollapsible={false}
+          showIcon={false}
+        >
           <div
             className="flex-1 break-words w-full group outline-none relative"
             tabIndex={0}

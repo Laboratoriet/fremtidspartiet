@@ -121,21 +121,21 @@ export function ChatMessages({
       role="list"
       aria-roledescription="chat messages"
       className={cn(
-        'relative size-full pt-14',
+        'relative size-full pt-4',
         sections.length > 0 ? 'flex-1 overflow-y-auto' : ''
       )}
     >
-      <div className="relative mx-auto w-full max-w-3xl px-4">
+      <div className="relative mx-auto w-full max-w-3xl px-4 pb-32">
         {sections.map((section, sectionIndex) => (
           <div
             key={section.id}
             id={`section-${section.id}`}
-            className="chat-section mb-8"
-            style={
-              sectionIndex === sections.length - 1
-                ? { minHeight: 'calc(-228px + 100dvh)' }
-                : {}
-            }
+            role="listitem"
+            className={cn(
+              'chat-section mb-8',
+              sectionIndex === sections.length - 1 &&
+                'min-h-[calc(100dvh-228px)]'
+            )}
           >
             {/* User message */}
             <div className="flex flex-col gap-4 mb-4">

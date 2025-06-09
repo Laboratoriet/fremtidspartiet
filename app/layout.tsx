@@ -18,7 +18,7 @@ const fontSans = FontSans({
 
 const title = 'Fremtidspartiet'
 const description =
-  'An AI-powered answer engine with a generative UI.'
+  'En digital samtaleplattform der AI møter demokrati.'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://fremtidspartiet.vercel.app'),

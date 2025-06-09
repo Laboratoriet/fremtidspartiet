@@ -6,10 +6,12 @@ import { Model } from '@/lib/types/models'
 import { cn, createModelId } from '@/lib/utils'
 import { getCookie } from '@/lib/utils/cookies'
 import { useChat } from '@ai-sdk/react'
+import { User } from '@supabase/supabase-js'
 import { ChatRequestOptions } from 'ai'
 import { Message } from 'ai/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { ChatHeader } from './chat-header'
 import { ChatMessages } from './chat-messages'
 import { ChatPanel } from './chat-panel'
 
@@ -24,12 +26,14 @@ export function Chat({
   id,
   savedMessages = [],
   query,
-  models
+  models,
+  user
 }: {
   id: string
   savedMessages?: Message[]
   query?: string
   models?: Model[]
+  user: User | null
 }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
@@ -37,7 +41,7 @@ export function Chat({
   const [selectedModelId, setSelectedModelId] = useState<string | null>(null)
 
   // Get the initial messages
-  const initialMessages = useMemo(() => savedMessages, [id])
+  const initialMessages = savedMessages
 
   // Update selected model ID from cookie
   useEffect(() => {
@@ -81,6 +85,11 @@ export function Chat({
     experimental_throttle: 100
   })
 
+  const selectedModel = useMemo(
+    () => models?.find(m => createModelId(m) === selectedModelId),
+    [models, selectedModelId]
+  )
+
   // Reset chat if selected model is invalid
   useEffect(() => {
     const savedModelId = getCookie('selectedModelId')
@@ -93,7 +102,7 @@ export function Chat({
       console.log('Clearing chat history due to invalid model')
       setMessages([])
     }
-  }, [models, setMessages])
+  }, [models, selectedModelId, setMessages])
 
   const isLoading = status === 'submitted' || status === 'streaming'
 
@@ -163,11 +172,6 @@ export function Chat({
       }
     }
   }, [sections, messages])
-
-  useEffect(() => {
-    setMessages(savedMessages)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
 
   const onQuerySelect = (query: string) => {
     append(
@@ -250,38 +254,45 @@ export function Chat({
   }
 
   return (
-    <div
-      className={cn(
-        'relative flex h-full min-w-0 flex-1 flex-col',
-        messages.length === 0 ? 'items-center justify-center' : ''
-      )}
-      data-testid="full-chat"
-    >
-      <ChatMessages
-        sections={sections}
-        data={data}
-        onQuerySelect={onQuerySelect}
-        isLoading={isLoading}
-        chatId={id}
-        addToolResult={addToolResult}
-        scrollContainerRef={scrollContainerRef}
-        onUpdateMessage={handleUpdateAndReloadMessage}
-        reload={handleReloadFrom}
+    <div className="flex flex-col h-full">
+      <ChatHeader
+        models={models || []}
+        selectedModel={selectedModel}
+        setSelectedModelId={setSelectedModelId}
+        user={user}
       />
-      <ChatPanel
-        input={input}
-        handleInputChange={handleInputChange}
-        handleSubmit={onSubmit}
-        isLoading={isLoading}
-        messages={messages}
-        setMessages={setMessages}
-        stop={stop}
-        query={query}
-        append={append}
-        models={models}
-        showScrollToBottomButton={!isAtBottom}
-        scrollContainerRef={scrollContainerRef}
-      />
+      <div
+        className={cn(
+          'flex-1 overflow-hidden',
+          messages.length > 0 ? '' : 'flex flex-col justify-center'
+        )}
+      >
+        <ChatMessages
+          sections={sections}
+          data={data}
+          onQuerySelect={onQuerySelect}
+          isLoading={isLoading}
+          chatId={id}
+          addToolResult={addToolResult}
+          scrollContainerRef={scrollContainerRef}
+          onUpdateMessage={handleUpdateAndReloadMessage}
+          reload={handleReloadFrom}
+        />
+        <ChatPanel
+          input={input}
+          handleInputChange={handleInputChange}
+          handleSubmit={onSubmit}
+          isLoading={isLoading}
+          messages={messages}
+          setMessages={setMessages}
+          stop={stop}
+          query={query}
+          append={append}
+          models={models}
+          showScrollToBottomButton={!isAtBottom}
+          scrollContainerRef={scrollContainerRef}
+        />
+      </div>
     </div>
   )
 }

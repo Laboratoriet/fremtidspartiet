@@ -32,7 +32,7 @@ export default function AppSidebar() {
             <SidebarMenuButton asChild>
               <Link href="/" className="flex items-center gap-2">
                 <Plus className="size-4" />
-                <span>Ny</span>
+                <span>Ny samtale</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

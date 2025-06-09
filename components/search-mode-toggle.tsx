@@ -11,17 +11,15 @@ export function SearchModeToggle() {
   return (
     <Button
       variant="outline"
+      size="icon"
       className={cn(
-        'text-sm rounded-full shadow-none',
+        'rounded-full shadow-none',
         isSearchEnabled &&
           'bg-accent-blue text-accent-blue-foreground border-accent-blue-border'
       )}
       onClick={() => setIsSearchEnabled(!isSearchEnabled)}
     >
-      <div className="flex items-center space-x-2">
-        <Globe size={16} />
-        <span className="text-xs font-medium">Websøk</span>
-      </div>
+      <Globe size={16} />
     </Button>
   )
 }

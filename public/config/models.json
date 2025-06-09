@@ -28,7 +28,8 @@
       "provider": "Google Generative AI",
       "providerId": "google",
       "enabled": true,
-      "toolCallType": "native"
+      "toolCallType": "manual",
+      "toolCallModel": "gemini-1.5-flash"
     }
   ]
-} 
+}

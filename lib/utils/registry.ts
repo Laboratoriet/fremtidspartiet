@@ -166,6 +166,6 @@ export function isReasoningModel(model: string): boolean {
   return (
     model.includes('deepseek-r1') ||
     model.includes('deepseek-reasoner') ||
-    model.includes('gpt-4o-mini')
+    model.includes('gemini-1.5-flash')
   )
 }

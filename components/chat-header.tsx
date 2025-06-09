@@ -82,7 +82,7 @@ export function ChatHeader({
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between bg-background px-4">
       {/* TODO: Add a functional sidebar trigger here */}
-      <div className="w-10" />
+      <div className="w-0" />
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -96,7 +96,7 @@ export function ChatHeader({
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-72 p-0" align="center">
+        <PopoverContent className="w-72 p-0 max-w-full" align="center">
           <Command>
             <CommandList>
               <CommandEmpty>No model found.</CommandEmpty>

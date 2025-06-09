@@ -264,7 +264,7 @@ export function Chat({
       <div
         className={cn(
           'flex-1 overflow-hidden',
-          messages.length > 0 ? '' : 'flex flex-col justify-center'
+          messages.length > 0 ? '' : 'flex'
         )}
       >
         <ChatMessages

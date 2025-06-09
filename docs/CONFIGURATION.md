@@ -121,7 +121,22 @@ docker-compose logs searxng
 
 ## Additional AI Providers
 
-Models are configured in `public/config/models.json`. Each model requires its corresponding API key to be set in the environment variables.
+Models are configured in `public/config/models.json`. Each model requires its corresponding API key to be set in the environment variables. The application reads this file at runtime, and if it can't be loaded (for example due to an incorrect base URL), it falls back to `lib/config/default-models.json`.
+
+### Customizing Default Models
+
+Edit `public/config/models.json` to change the three default models shipped with the repository:
+
+```json
+{
+  "models": [
+    { "id": "gpt-4o-mini", "name": "Kreativ", "enabled": true },
+    { "id": "claude-3-5-sonnet-latest", "name": "Reflektert", "enabled": true },
+    { "id": "gemini-1.5-flash", "name": "Analytisk", "enabled": true }
+  ]
+}
+```
+
 
 ### Model Configuration
 

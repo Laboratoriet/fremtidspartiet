@@ -3,6 +3,8 @@ import { getModels } from '@/lib/config/models'
 import { generateId } from 'ai'
 import { Chat } from '../components/chat'
 
+export const dynamic = 'force-dynamic'
+
 export default async function IndexPage() {
   const id = generateId()
   const models = await getModels()

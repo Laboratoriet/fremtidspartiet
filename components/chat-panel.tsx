@@ -2,6 +2,7 @@
 
 import { Model } from '@/lib/types/models'
 import { cn } from '@/lib/utils'
+import { deleteCookie } from '@/lib/utils/cookies'
 import { Message } from 'ai'
 import { ArrowUp, ChevronDown, MessageCirclePlus, Square } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -52,6 +53,11 @@ export function ChatPanel({
   const [isComposing, setIsComposing] = useState(false) // Composition state
   const [enterDisabled, setEnterDisabled] = useState(false) // Disable Enter after composition ends
   const { close: closeArtifact } = useArtifact()
+
+  // Delete the old, problematic cookie
+  useEffect(() => {
+    deleteCookie('selectedModel')
+  }, [])
 
   const handleCompositionStart = () => setIsComposing(true)
 

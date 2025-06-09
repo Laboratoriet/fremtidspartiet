@@ -3,7 +3,8 @@
 import { CHAT_ID } from '@/lib/constants'
 import { useSearchMode } from '@/lib/hooks/use-search-mode'
 import { Model } from '@/lib/types/models'
-import { cn } from '@/lib/utils'
+import { cn, createModelId } from '@/lib/utils'
+import { getCookie } from '@/lib/utils/cookies'
 import { useChat } from '@ai-sdk/react'
 import { ChatRequestOptions } from 'ai'
 import { Message } from 'ai/react'
@@ -33,6 +34,21 @@ export function Chat({
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
   const [isSearchEnabled] = useSearchMode()
+  const [selectedModelId, setSelectedModelId] = useState<string | null>(null)
+
+  // Get the initial messages
+  const initialMessages = useMemo(() => savedMessages, [id])
+
+  // Update selected model ID from cookie
+  useEffect(() => {
+    const savedModelId = getCookie('selectedModelId')
+    if (savedModelId) {
+      setSelectedModelId(savedModelId)
+    } else if (models && models.length > 0) {
+      const defaultModelId = createModelId(models[0])
+      setSelectedModelId(defaultModelId)
+    }
+  }, [models])
 
   const {
     messages,
@@ -48,10 +64,11 @@ export function Chat({
     addToolResult,
     reload
   } = useChat({
-    initialMessages: savedMessages,
+    initialMessages,
     id: CHAT_ID,
     body: {
-      id
+      id,
+      modelId: selectedModelId
     },
     onFinish: () => {
       window.history.replaceState({}, '', `/search/${id}`)
@@ -63,6 +80,20 @@ export function Chat({
     sendExtraMessageFields: false, // Disable extra message fields,
     experimental_throttle: 100
   })
+
+  // Reset chat if selected model is invalid
+  useEffect(() => {
+    const savedModelId = getCookie('selectedModelId')
+    if (
+      models &&
+      models.length > 0 &&
+      savedModelId &&
+      !models.some(m => createModelId(m) === savedModelId)
+    ) {
+      console.log('Clearing chat history due to invalid model')
+      setMessages([])
+    }
+  }, [models, setMessages])
 
   const isLoading = status === 'submitted' || status === 'streaming'
 

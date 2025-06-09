@@ -4,6 +4,7 @@
       "id": "gpt-4o-mini",
       "name": "Kreativ",
       "description": "Best for rask idémyldring og nye tanker.",
+      "icon": "lightbulb",
       "provider": "OpenAI",
       "providerId": "openai",
       "enabled": true,
@@ -13,17 +14,19 @@
       "id": "claude-3-5-sonnet-latest",
       "name": "Reflektert",
       "description": "Best for nyanserte samtaler og dypere innsikt.",
+      "icon": "scale",
       "provider": "Anthropic",
       "providerId": "anthropic",
       "enabled": true,
       "toolCallType": "native"
     },
     {
-      "id": "o3",
+      "id": "gemini-1.5-flash",
       "name": "Analytisk",
       "description": "Best for problemløsning og komplekse spørsmål.",
-      "provider": "OpenAI",
-      "providerId": "openai",
+      "icon": "microscope",
+      "provider": "Google Generative AI",
+      "providerId": "google",
       "enabled": true,
       "toolCallType": "native"
     }

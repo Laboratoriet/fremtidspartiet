@@ -10,9 +10,8 @@ export async function generateRelatedQuestions(
   messages: CoreMessage[],
   model: string
 ) {
-  const lastMessages = messages.slice(-2).map(message => ({
-    ...message,
-    role: 'user'
+  const lastMessages = messages.map(message => ({
+    ...message
   })) as CoreMessage[]
 
   const supportedModel = isToolCallSupported(model)
@@ -27,7 +26,7 @@ export async function generateRelatedQuestions(
     For instance, if the original query was "Starship's third test flight key milestones", your output should follow this format:
 
     Aim to create queries that progressively delve into more specific aspects, implications, or adjacent topics related to the initial query. The goal is to anticipate the user's potential information needs and guide them towards a more comprehensive understanding of the subject matter.
-    Please match the language of the response to the user's language.`,
+    The response must be in the same language as the user's query.`,
     messages: lastMessages,
     schema: relatedSchema
   })

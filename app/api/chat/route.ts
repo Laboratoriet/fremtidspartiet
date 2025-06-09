@@ -1,7 +1,9 @@
 import { getCurrentUserId } from '@/lib/auth/get-current-user'
+import { getModels } from '@/lib/config/models'
 import { createManualToolStreamResponse } from '@/lib/streaming/create-manual-tool-stream'
 import { createToolCallingStreamResponse } from '@/lib/streaming/create-tool-calling-stream'
 import { Model } from '@/lib/types/models'
+import { createModelId } from '@/lib/utils'
 import { isProviderEnabled } from '@/lib/utils/registry'
 import { cookies } from 'next/headers'
 
@@ -31,17 +33,18 @@ export async function POST(req: Request) {
     }
 
     const cookieStore = await cookies()
-    const modelJson = cookieStore.get('selectedModel')?.value
+    const modelId = cookieStore.get('selectedModelId')?.value
     const searchMode = isSearchEnabled
 
-    let selectedModel = DEFAULT_MODEL
+    let selectedModel: Model | undefined
 
-    if (modelJson) {
-      try {
-        selectedModel = JSON.parse(modelJson) as Model
-      } catch (e) {
-        console.error('Failed to parse selected model:', e)
-      }
+    if (modelId) {
+      const allModels = await getModels()
+      selectedModel = allModels.find((m: Model) => createModelId(m) === modelId)
+    }
+
+    if (!selectedModel) {
+      selectedModel = DEFAULT_MODEL
     }
 
     if (

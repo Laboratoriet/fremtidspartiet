@@ -7,9 +7,9 @@ import { groq } from '@ai-sdk/groq'
 import { createOpenAI, openai } from '@ai-sdk/openai'
 import { xai } from '@ai-sdk/xai'
 import {
-  createProviderRegistry,
-  extractReasoningMiddleware,
-  wrapLanguageModel
+    createProviderRegistry,
+    extractReasoningMiddleware,
+    wrapLanguageModel
 } from 'ai'
 import { createOllama } from 'ollama-ai-provider'
 
@@ -136,7 +136,7 @@ export function getToolCallModel(model?: string) {
         process.env.NEXT_PUBLIC_OLLAMA_TOOL_CALL_MODEL || modelName
       return getModel(`ollama:${ollamaModel}`)
     case 'google':
-      return getModel('google:gemini-2.0-flash')
+      return getModel('google:gemini-1.5-flash')
     default:
       return getModel('openai:gpt-4o-mini')
   }
@@ -166,6 +166,6 @@ export function isReasoningModel(model: string): boolean {
   return (
     model.includes('deepseek-r1') ||
     model.includes('deepseek-reasoner') ||
-    model.includes('o3-mini')
+    model.includes('gpt-4o-mini')
   )
 }

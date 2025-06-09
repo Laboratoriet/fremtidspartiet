@@ -11,6 +11,7 @@ export function validateModel(model: any): model is Model {
     typeof model.id === 'string' &&
     typeof model.name === 'string' &&
     (model.description === undefined || typeof model.description === 'string') &&
+    (model.icon === undefined || typeof model.icon === 'string') &&
     typeof model.provider === 'string' &&
     typeof model.providerId === 'string' &&
     typeof model.enabled === 'boolean' &&

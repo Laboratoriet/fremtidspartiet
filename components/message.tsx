@@ -34,7 +34,7 @@ export function BotMessage({
         ]}
         remarkPlugins={[remarkGfm, remarkMath]}
         className={cn(
-          'prose-sm prose-neutral prose-a:text-accent-foreground/50',
+          'prose prose-neutral prose-a:text-accent-foreground/50',
           className
         )}
       >
@@ -48,7 +48,7 @@ export function BotMessage({
       rehypePlugins={[[rehypeExternalLinks, { target: '_blank' }]]}
       remarkPlugins={[remarkGfm]}
       className={cn(
-        'prose-sm prose-neutral prose-a:text-accent-foreground/50',
+        'prose prose-neutral prose-a:text-accent-foreground/50',
         className
       )}
       components={{

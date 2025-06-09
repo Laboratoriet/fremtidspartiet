@@ -34,7 +34,7 @@ export function EmptyScreen({
             <Button
               key={index}
               variant="link"
-              className="h-auto p-0 text-base"
+              className="h-auto p-0 text-base whitespace-normal text-left justify-start"
               name={message.message}
               onClick={async () => {
                 submitMessage(message.message)

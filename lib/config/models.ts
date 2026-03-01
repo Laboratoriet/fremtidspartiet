@@ -7,7 +7,7 @@ const defaultModels: { models: Model[] } = defaultModelsData as {
 }
 
 export function validateModel(model: any): model is Model {
-  return (
+  return !!(
     typeof model.id === 'string' &&
     typeof model.name === 'string' &&
     (model.description === undefined || typeof model.description === 'string') &&

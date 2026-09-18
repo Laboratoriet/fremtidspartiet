@@ -39,7 +39,8 @@ export function createManualToolStreamResponse(config: BaseStreamConfig) {
         const researcherConfig = manualResearcher({
           messages: [...truncatedMessages, ...toolCallMessages],
           model: modelId,
-          isSearchEnabled: searchMode
+          isSearchEnabled: searchMode,
+          mode: model.mode
         })
 
         // Variables to track the reasoning timing.

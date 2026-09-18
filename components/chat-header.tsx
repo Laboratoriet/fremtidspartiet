@@ -5,19 +5,14 @@ import { createModelId } from '@/lib/utils'
 import { setCookie } from '@/lib/utils/cookies'
 import { User } from '@supabase/supabase-js'
 import {
-    BarChartBig,
-    BrainCircuit,
-    Check,
-    ChevronsUpDown,
-    Lightbulb,
-    MessageCirclePlus,
-    Microscope,
-    Scale
+  Check,
+  ChevronsUpDown,
+  MessageCirclePlus
 } from 'lucide-react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { ComponentType, useState } from 'react'
+import { useState } from 'react'
 import GuestMenu from './guest-menu'
+import { ModelIcon } from './model-icon'
 import { Button } from './ui/button'
 import { Command, CommandEmpty, CommandItem, CommandList } from './ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
@@ -28,14 +23,6 @@ interface ChatHeaderProps {
   selectedModel: Model | undefined
   setSelectedModelId: (id: string | null) => void
   user: User | null
-}
-
-const iconMap: Record<string, ComponentType<{ className?: string }>> = {
-  lightbulb: Lightbulb,
-  microscope: Microscope,
-  'brain-circuit': BrainCircuit,
-  'bar-chart-big': BarChartBig,
-  scale: Scale
 }
 
 export function ChatHeader({
@@ -53,25 +40,9 @@ export function ChatHeader({
     setOpen(false)
   }
 
-  const renderIcon = (model: Model) => {
-    const IconComponent = model.icon ? iconMap[model.icon] : null
-    if (IconComponent) {
-      return (
-        <IconComponent className="mr-2 size-5 text-muted-foreground/80" />
-      )
-    }
-    const providerIcon =
-      model.providerId === 'google' ? 'google' : model.providerId
-    return (
-      <Image
-        src={`/providers/logos/${providerIcon}.svg`}
-        alt={model.provider}
-        width={18}
-        height={18}
-        className="mr-2 bg-white rounded-full border"
-      />
-    )
-  }
+  const renderIcon = (model: Model) => (
+    <ModelIcon model={model} className="mr-2 size-5 text-muted-foreground/80" />
+  )
 
   const handleNewChat = () => {
     router.push('/search')

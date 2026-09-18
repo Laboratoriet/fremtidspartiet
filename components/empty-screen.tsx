@@ -3,6 +3,10 @@ import { ArrowRight } from 'lucide-react'
 
 const exampleMessages = [
   {
+    heading: 'Hva er Fremtidspartiet?',
+    message: 'Hva er Fremtidspartiet, og hva vil dere oppnå?'
+  },
+  {
     heading: 'Kan AI hjelpe oss å bygge et bedre samfunn?',
     message: 'Hvordan kan vi designe et samfunn der maskiner jobber og mennesker lever meningsfylte liv?'
   },

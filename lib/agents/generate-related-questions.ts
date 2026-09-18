@@ -6,13 +6,29 @@ import {
     isToolCallSupported
 } from '../utils/registry'
 
+const RELATED_QUESTIONS_PROMPT = `Du foreslår tre oppfølgingsspørsmål til en samtale med Veiviseren, AI-samtalepartneren til Fremtidspartiet – et spekulativt prosjekt om politikk, teknologi og fremtid (ikke et registrert parti, og ikke Fremskrittspartiet).
+
+Regler:
+- Skriv spørsmålene på samme språk som brukeren (norsk bokmål som standard).
+- Korte, naturlige spørsmål slik en nysgjerrig bruker ville stilt dem – maks 12 ord hver.
+- Bygg videre på det siste svaret: ett som går dypere, ett som tar et annet perspektiv, ett som knytter temaet til Fremtidspartiets ideer (fremtidstenkning, demokratisk styring av teknologi, utdanning, borgerlønn, digitalt demokrati) når det passer.
+- Nevn aldri Fremskrittspartiet, FrP eller andre politiske partier med mindre brukeren selv har tatt dem opp.
+- Ingen nummerering, ingen forklaringer – bare de tre spørsmålene.`
+
 export async function generateRelatedQuestions(
   messages: CoreMessage[],
   model: string
 ) {
-  const lastMessages = messages.map(message => ({
-    ...message
-  })) as CoreMessage[]
+  // End with a user turn: current Claude models reject a conversation that
+  // ends with an assistant message (treated as prefill), and the request is
+  // clearer for every provider this way.
+  const lastMessages: CoreMessage[] = [
+    ...messages.map(message => ({ ...message })),
+    {
+      role: 'user',
+      content: 'Foreslå tre oppfølgingsspørsmål til svaret ditt over.'
+    }
+  ]
 
   const supportedModel = isToolCallSupported(model)
   const currentModel = supportedModel
@@ -21,12 +37,7 @@ export async function generateRelatedQuestions(
 
   const result = await generateObject({
     model: currentModel,
-    system: `As a professional web researcher, your task is to generate a set of three queries that explore the subject matter more deeply, building upon the initial query and the information uncovered in its search results.
-
-    For instance, if the original query was "Starship's third test flight key milestones", your output should follow this format:
-
-    Aim to create queries that progressively delve into more specific aspects, implications, or adjacent topics related to the initial query. The goal is to anticipate the user's potential information needs and guide them towards a more comprehensive understanding of the subject matter.
-    The response must be in the same language as the user's query.`,
+    system: RELATED_QUESTIONS_PROMPT,
     messages: lastMessages,
     schema: relatedSchema
   })

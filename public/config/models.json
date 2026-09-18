@@ -2,33 +2,36 @@
   "models": [
     {
       "id": "gpt-4o-mini",
-      "name": "Kreativ",
-      "description": "Best for rask idémyldring og nye tanker.",
-      "icon": "lightbulb",
+      "name": "Direkte",
+      "description": "Rett på sak, korte svar.",
+      "icon": "zap",
       "provider": "OpenAI",
       "providerId": "openai",
       "enabled": true,
-      "toolCallType": "native"
+      "toolCallType": "native",
+      "mode": "kort"
     },
     {
-      "id": "claude-3-5-sonnet-latest",
+      "id": "claude-sonnet-5",
       "name": "Reflektert",
-      "description": "Best for nyanserte samtaler og dypere innsikt.",
+      "description": "Nyanserte svar med flere perspektiver.",
       "icon": "scale",
       "provider": "Anthropic",
       "providerId": "anthropic",
       "enabled": true,
-      "toolCallType": "native"
+      "toolCallType": "native",
+      "mode": "reflektert"
     },
     {
       "id": "gpt-4.1",
       "name": "Analytisk",
-      "description": "Best for problemløsning og komplekse spørsmål.",
+      "description": "Strukturert og grundig, for komplekse spørsmål.",
       "icon": "microscope",
       "provider": "OpenAI",
       "providerId": "openai",
       "enabled": true,
-      "toolCallType": "native"
+      "toolCallType": "native",
+      "mode": "analytisk"
     }
   ]
-} 
+}

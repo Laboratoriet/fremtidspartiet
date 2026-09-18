@@ -4,17 +4,13 @@ import { Model } from '@/lib/types/models'
 import { getCookie, setCookie } from '@/lib/utils/cookies'
 import { isReasoningModel } from '@/lib/utils/registry'
 import {
-    BarChartBig,
-    BrainCircuit,
-    Check,
-    ChevronsUpDown,
-    Lightbulb,
-    Microscope,
-    Scale
+  Check,
+  ChevronsUpDown,
+  Lightbulb
 } from 'lucide-react'
-import Image from 'next/image'
-import { ComponentType, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createModelId } from '../lib/utils'
+import { ModelIcon } from './model-icon'
 import { Button } from './ui/button'
 import {
     Command,
@@ -26,14 +22,6 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
 interface ModelSelectorProps {
   models: Model[]
-}
-
-const iconMap: Record<string, ComponentType<{ className?: string }>> = {
-  lightbulb: Lightbulb,
-  microscope: Microscope,
-  'brain-circuit': BrainCircuit,
-  'bar-chart-big': BarChartBig,
-  scale: Scale
 }
 
 export function ModelSelector({ models }: ModelSelectorProps) {
@@ -61,27 +49,12 @@ export function ModelSelector({ models }: ModelSelectorProps) {
 
   const selectedModel = models.find(model => createModelId(model) === value)
 
-  const renderIcon = (model: Model) => {
-    const IconComponent = model.icon ? iconMap[model.icon] : null
-    if (IconComponent) {
-      return (
-        <IconComponent className="mr-2 size-5 text-muted-foreground/80 mt-0.5" />
-      )
-    }
-
-    const providerIcon =
-      model.providerId === 'google' ? 'google' : model.providerId
-
-    return (
-      <Image
-        src={`/providers/logos/${providerIcon}.svg`}
-        alt={model.provider}
-        width={20}
-        height={20}
-        className="mr-2 mt-0.5 bg-white rounded-full border"
-      />
-    )
-  }
+  const renderIcon = (model: Model) => (
+    <ModelIcon
+      model={model}
+      className="mr-2 size-5 text-muted-foreground/80 mt-0.5"
+    />
+  )
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

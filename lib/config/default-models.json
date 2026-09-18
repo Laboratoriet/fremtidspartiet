@@ -2,34 +2,37 @@
   "models": [
     {
       "id": "gpt-4o-mini",
-      "name": "Kreativ",
-      "description": "Best for rask idémyldring og nye tanker.",
-      "icon": "lightbulb",
+      "name": "Direkte",
+      "description": "Rett på sak, korte svar.",
+      "icon": "zap",
       "provider": "OpenAI",
       "providerId": "openai",
       "enabled": true,
-      "toolCallType": "native"
+      "toolCallType": "native",
+      "mode": "kort"
     },
     {
-      "id": "claude-3-5-sonnet-latest",
+      "id": "claude-sonnet-5",
       "name": "Reflektert",
-      "description": "Best for nyanserte samtaler og dypere innsikt.",
+      "description": "Nyanserte svar med flere perspektiver.",
       "icon": "scale",
       "provider": "Anthropic",
       "providerId": "anthropic",
       "enabled": true,
-      "toolCallType": "native"
+      "toolCallType": "native",
+      "mode": "reflektert"
     },
     {
       "id": "gemini-1.5-flash",
       "name": "Analytisk",
-      "description": "Best for problemløsning og komplekse spørsmål.",
+      "description": "Strukturert og grundig, for komplekse spørsmål.",
       "icon": "microscope",
       "provider": "Google Generative AI",
       "providerId": "google",
       "enabled": true,
       "toolCallType": "manual",
-      "toolCallModel": "gemini-1.5-flash"
+      "toolCallModel": "gemini-1.5-flash",
+      "mode": "analytisk"
     },
     {
       "id": "gpt-4.1",
@@ -114,7 +117,6 @@
       "toolCallModel": "gemini-2.0-flash"
     },
     {
-      
       "name": "Gemini 2.5 Pro (Exp)",
       "provider": "Google Generative AI",
       "providerId": "google",

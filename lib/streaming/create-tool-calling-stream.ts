@@ -40,7 +40,8 @@ export function createToolCallingStreamResponse(config: BaseStreamConfig) {
         let researcherConfig = await researcher({
           messages: truncatedMessages,
           model: modelId,
-          searchMode
+          searchMode,
+          mode: model.mode
         })
 
         const result = streamText({

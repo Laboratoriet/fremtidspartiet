@@ -8,4 +8,6 @@ export interface Model {
   enabled: boolean
   toolCallType: 'native' | 'manual'
   toolCallModel?: string
+  /** Answer style for Veiviseren. Drives the system prompt, see lib/prompts/veiviseren.ts */
+  mode?: 'kort' | 'reflektert' | 'analytisk'
 }

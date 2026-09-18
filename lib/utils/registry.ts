@@ -9,6 +9,7 @@ import { xai } from '@ai-sdk/xai'
 import {
     createProviderRegistry,
     extractReasoningMiddleware,
+    LanguageModelV1Middleware,
     wrapLanguageModel
 } from 'ai'
 import { createOllama } from 'ollama-ai-provider'
@@ -84,9 +85,29 @@ export function getModel(model: string) {
     })
   }
 
-  return registry.languageModel(
+  const languageModel = registry.languageModel(
     model as Parameters<typeof registry.languageModel>[0]
   )
+
+  // Claude Sonnet 5 / Opus 5 reject sampling params, and the AI SDK sends
+  // temperature: 0 by default. Strip them for every Anthropic model.
+  if (provider === 'anthropic') {
+    return wrapLanguageModel({
+      model: languageModel,
+      middleware: stripSamplingParams
+    })
+  }
+
+  return languageModel
+}
+
+const stripSamplingParams: LanguageModelV1Middleware = {
+  transformParams: async ({ params }) => ({
+    ...params,
+    temperature: undefined,
+    topP: undefined,
+    topK: undefined
+  })
 }
 
 export function isProviderEnabled(providerId: string): boolean {

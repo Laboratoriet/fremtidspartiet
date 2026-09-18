@@ -188,11 +188,25 @@ export function convertToUIMessages(
       }
     }
 
+    // RenderMessage reads `parts`, not `content`, so build them here or a
+    // reloaded chat shows the questions without their answers.
+    const parts: NonNullable<Message['parts']> = [
+      ...(message.role === 'assistant' && pendingReasoning
+        ? [{ type: 'reasoning' as const, reasoning: pendingReasoning, details: [] }]
+        : []),
+      ...toolInvocations.map(toolInvocation => ({
+        type: 'tool-invocation' as const,
+        toolInvocation
+      })),
+      ...(textContent ? [{ type: 'text' as const, text: textContent }] : [])
+    ]
+
     // Create the new message. Note: we do not include a top-level "reasoning" property.
     const newMessage: Message = {
       id: generateId(),
       role: message.role,
       content: textContent,
+      parts,
       toolInvocations: toolInvocations.length > 0 ? toolInvocations : undefined,
       annotations: annotations
     }

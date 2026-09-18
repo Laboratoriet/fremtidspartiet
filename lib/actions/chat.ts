@@ -1,6 +1,8 @@
 'use server'
 
+import { getCurrentUserId } from '@/lib/auth/get-current-user'
 import { getRedisClient, RedisWrapper } from '@/lib/redis/config'
+import { ALL_CHATS_KEY } from '@/lib/redis/keys'
 import { type Chat } from '@/lib/types'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -13,6 +15,7 @@ const CHAT_VERSION = 'v2'
 function getUserChatKey(userId: string) {
   return `user:${CHAT_VERSION}:chat:${userId}`
 }
+
 
 export async function getChats(userId?: string | null) {
   if (!userId) {
@@ -144,8 +147,10 @@ export async function getChat(id: string, userId: string = 'anonymous') {
 }
 
 export async function clearChats(
-  userId: string = 'anonymous'
+  userId?: string
 ): Promise<{ error?: string }> {
+  // Server action called from the browser: never trust a passed-in id
+  userId = userId ?? (await getCurrentUserId())
   const redis = await getRedis()
   const userChatKey = getUserChatKey(userId)
   const chats = await redis.zrange(userChatKey, 0, -1)
@@ -157,6 +162,7 @@ export async function clearChats(
   for (const chat of chats) {
     pipeline.del(chat)
     pipeline.zrem(userChatKey, chat)
+    pipeline.zrem(ALL_CHATS_KEY, chat)
   }
 
   await pipeline.exec()
@@ -167,9 +173,10 @@ export async function clearChats(
 
 export async function deleteChat(
   chatId: string,
-  userId = 'anonymous'
+  userId?: string
 ): Promise<{ error?: string }> {
   try {
+    userId = userId ?? (await getCurrentUserId())
     const redis = await getRedis()
     const userKey = getUserChatKey(userId)
     const chatKey = `chat:${chatId}`
@@ -180,15 +187,15 @@ export async function deleteChat(
       return { error: 'Chat not found' }
     }
 
-    // Optional: Check if the chat actually belongs to the user if userId is provided and matters
-    // if (chatDetails.userId !== userId) {
-    //  console.warn(`Unauthorized attempt to delete chat ${chatId} by user ${userId}`)
-    //  return { error: 'Unauthorized' }
-    // }
+    if (chatDetails.userId !== userId) {
+      console.warn(`Unauthorized attempt to delete chat ${chatId}`)
+      return { error: 'Unauthorized' }
+    }
 
     const pipeline = redis.pipeline()
     pipeline.del(chatKey)
     pipeline.zrem(userKey, chatKey) // Use chatKey consistently
+    pipeline.zrem(ALL_CHATS_KEY, chatKey)
     await pipeline.exec()
 
     // Revalidate the root path where the chat history is displayed
@@ -213,6 +220,11 @@ export async function saveChat(chat: Chat, userId: string = 'anonymous') {
 
     pipeline.hmset(`chat:${chat.id}`, chatToSave)
     pipeline.zadd(getUserChatKey(userId), Date.now(), `chat:${chat.id}`)
+    pipeline.zadd(
+      ALL_CHATS_KEY,
+      new Date(chat.createdAt).getTime() || Date.now(),
+      `chat:${chat.id}`
+    )
 
     const results = await pipeline.exec()
 

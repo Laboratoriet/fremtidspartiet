@@ -102,6 +102,48 @@ export class RedisWrapper {
     }
   }
 
+  async incr(key: string): Promise<number> {
+    if (this.client instanceof Redis) {
+      return this.client.incr(key)
+    } else {
+      return (this.client as RedisClientType).incr(key)
+    }
+  }
+
+  async expire(key: string, seconds: number): Promise<boolean | number> {
+    if (this.client instanceof Redis) {
+      return this.client.expire(key, seconds)
+    } else {
+      return (this.client as RedisClientType).expire(key, seconds)
+    }
+  }
+
+  async zcard(key: string): Promise<number> {
+    if (this.client instanceof Redis) {
+      return this.client.zcard(key)
+    } else {
+      return (this.client as RedisClientType).zCard(key)
+    }
+  }
+
+  /** One SCAN step; loop until the returned cursor is '0'. */
+  async scan(
+    cursor: string,
+    match: string,
+    count = 100
+  ): Promise<{ cursor: string; keys: string[] }> {
+    if (this.client instanceof Redis) {
+      const [next, keys] = await this.client.scan(cursor, { match, count })
+      return { cursor: String(next), keys }
+    } else {
+      const result = await (this.client as RedisClientType).scan(
+        Number(cursor),
+        { MATCH: match, COUNT: count }
+      )
+      return { cursor: String(result.cursor), keys: result.keys }
+    }
+  }
+
   async close(): Promise<void> {
     if (this.client instanceof Redis) {
       // Upstash Redis doesn't require explicit closing

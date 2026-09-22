@@ -9,12 +9,13 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import Textarea from 'react-textarea-autosize'
 import { useArtifact } from './artifact/artifact-context'
-import { EmptyScreen } from './empty-screen'
+import { EmptyScreen, PublicQuestion } from './empty-screen'
 import { SearchModeToggle } from './search-mode-toggle'
 import { Button } from './ui/button'
 import { IconLogo } from './ui/icons'
 
 interface ChatPanelProps {
+  publicQuestions?: PublicQuestion[]
   input: string
   handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
@@ -32,6 +33,7 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({
+  publicQuestions,
   input,
   handleInputChange,
   handleSubmit,
@@ -221,12 +223,19 @@ export function ChatPanel({
         </div>
 
         {messages.length === 0 && (
+          <p className="mt-2 px-4 text-center text-xs text-muted-foreground">
+            Spørsmål kan vises anonymt for andre under «Andre har spurt».
+          </p>
+        )}
+
+        {messages.length === 0 && (
           <EmptyScreen
             submitMessage={message => {
               handleInputChange({
                 target: { value: message }
               } as React.ChangeEvent<HTMLTextAreaElement>)
             }}
+            publicQuestions={publicQuestions}
             className={cn(showEmptyScreen ? 'visible' : 'invisible')}
           />
         )}

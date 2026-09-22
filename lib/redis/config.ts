@@ -144,6 +144,39 @@ export class RedisWrapper {
     }
   }
 
+  async sadd(key: string, member: string): Promise<number> {
+    if (this.client instanceof Redis) {
+      return this.client.sadd(key, member)
+    } else {
+      return (this.client as RedisClientType).sAdd(key, member)
+    }
+  }
+
+  async sismember(key: string, member: string): Promise<boolean> {
+    if (this.client instanceof Redis) {
+      return (await this.client.sismember(key, member)) === 1
+    } else {
+      return (this.client as RedisClientType).sIsMember(key, member)
+    }
+  }
+
+  async srem(key: string, member: string): Promise<number> {
+    if (this.client instanceof Redis) {
+      return this.client.srem(key, member)
+    } else {
+      return (this.client as RedisClientType).sRem(key, member)
+    }
+  }
+
+  /** Keep only the newest `keep` members of a sorted set. */
+  async ztrim(key: string, keep: number): Promise<number> {
+    if (this.client instanceof Redis) {
+      return this.client.zremrangebyrank(key, 0, -keep - 1)
+    } else {
+      return (this.client as RedisClientType).zRemRangeByRank(key, 0, -keep - 1)
+    }
+  }
+
   async close(): Promise<void> {
     if (this.client instanceof Redis) {
       // Upstash Redis doesn't require explicit closing

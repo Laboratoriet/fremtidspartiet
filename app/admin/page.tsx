@@ -1,4 +1,5 @@
 import {
+  backfillFeedAndRedirect,
   listAllChats,
   logoutAdmin,
   reindexAllChatsAndRedirect
@@ -23,10 +24,11 @@ function countTurns(chat: Chat) {
 }
 
 export default async function AdminPage(props: {
-  searchParams: Promise<{ page?: string; reindexed?: string }>
+  searchParams: Promise<{ page?: string; reindexed?: string; feed?: string }>
 }) {
   await requireAdmin()
-  const { page: pageParam, reindexed } = await props.searchParams
+  const { page: pageParam, reindexed, feed } = await props.searchParams
+  const feedResult = feed?.match(/^(\d+)of(\d+)$/)
   const page = Math.max(0, Number(pageParam) || 0)
   const { chats, total, pageCount } = await listAllChats(page)
 
@@ -40,6 +42,11 @@ export default async function AdminPage(props: {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <form action={backfillFeedAndRedirect}>
+            <Button type="submit" variant="outline" size="sm">
+              Fyll forsiden
+            </Button>
+          </form>
           <form action={reindexAllChatsAndRedirect}>
             <Button type="submit" variant="outline" size="sm">
               Reindekser
@@ -56,6 +63,12 @@ export default async function AdminPage(props: {
       {reindexed && (
         <p className="rounded-md border bg-muted/40 px-3 py-2 text-sm">
           Reindeksering ferdig: {reindexed} samtaler i indeksen.
+        </p>
+      )}
+      {feedResult && (
+        <p className="rounded-md border bg-muted/40 px-3 py-2 text-sm">
+          Forsiden fylt: {feedResult[1]} av {feedResult[2]} nye spørsmål godkjent.
+          Godkjente spørsmål vises etter ventetiden.
         </p>
       )}
 

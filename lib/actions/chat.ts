@@ -2,6 +2,7 @@
 
 import { getCurrentUserId } from '@/lib/auth/get-current-user'
 import { getRedisClient, RedisWrapper } from '@/lib/redis/config'
+import { removeFromFeed } from '@/lib/feed/store'
 import { ALL_CHATS_KEY } from '@/lib/redis/keys'
 import { type Chat } from '@/lib/types'
 import { revalidatePath } from 'next/cache'
@@ -166,6 +167,7 @@ export async function clearChats(
   }
 
   await pipeline.exec()
+  await Promise.all(chats.map(chat => removeFromFeed(chat.replace(/^chat:/, ''))))
 
   revalidatePath('/')
   redirect('/')
@@ -197,6 +199,7 @@ export async function deleteChat(
     pipeline.zrem(userKey, chatKey) // Use chatKey consistently
     pipeline.zrem(ALL_CHATS_KEY, chatKey)
     await pipeline.exec()
+    await removeFromFeed(chatId)
 
     // Revalidate the root path where the chat history is displayed
     revalidatePath('/')

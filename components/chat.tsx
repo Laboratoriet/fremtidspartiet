@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 import { ChatHeader } from './chat-header'
 import { ChatMessages } from './chat-messages'
 import { ChatPanel } from './chat-panel'
+import { PublicQuestion } from './empty-screen'
 
 // Define section structure
 interface ChatSection {
@@ -27,13 +28,15 @@ export function Chat({
   savedMessages = [],
   query,
   models,
-  user
+  user,
+  publicQuestions
 }: {
   id: string
   savedMessages?: Message[]
   query?: string
   models?: Model[]
   user: User | null
+  publicQuestions?: PublicQuestion[]
 }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
@@ -291,6 +294,7 @@ export function Chat({
           models={models}
           showScrollToBottomButton={!isAtBottom}
           scrollContainerRef={scrollContainerRef}
+          publicQuestions={publicQuestions}
         />
       </div>
     </div>

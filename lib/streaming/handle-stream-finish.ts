@@ -3,6 +3,8 @@ import { generateRelatedQuestions } from '@/lib/agents/generate-related-question
 import { ExtendedCoreMessage } from '@/lib/types'
 import { convertToExtendedCoreMessages } from '@/lib/utils'
 import { CoreMessage, DataStreamWriter, JSONValue, Message } from 'ai'
+import { after } from 'next/server'
+import { reviewQuestionSafely } from '@/lib/feed/review'
 
 interface HandleStreamFinishParams {
   responseMessages: CoreMessage[]
@@ -71,7 +73,8 @@ export async function handleStreamFinish({
     }
 
     // Get the chat from the database if it exists, otherwise create a new one
-    const savedChat = (await getChat(chatId, userId)) ?? {
+    const existingChat = await getChat(chatId, userId)
+    const savedChat = existingChat ?? {
       messages: [],
       createdAt: new Date(),
       userId: userId,
@@ -91,6 +94,15 @@ export async function handleStreamFinish({
       console.error('Failed to save chat:', error)
       throw new Error('Failed to save chat history')
     })
+
+    // First question of a brand-new chat: consider it for «Andre har spurt».
+    // Runs after the response is done so it never delays the user.
+    if (!existingChat) {
+      const firstQuestion = originalMessages.find(m => m.role === 'user')?.content
+      if (typeof firstQuestion === 'string' && firstQuestion.trim()) {
+        after(() => reviewQuestionSafely(chatId, firstQuestion))
+      }
+    }
   } catch (error) {
     console.error('Error in handleStreamFinish:', error)
     throw error

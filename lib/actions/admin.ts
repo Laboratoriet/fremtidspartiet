@@ -15,6 +15,14 @@ import { cookies, headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ALL_CHATS_KEY } from '@/lib/redis/keys'
+import { reviewQuestion } from '@/lib/feed/review'
+import {
+  addToFeed,
+  getFeedEntry,
+  isReviewed,
+  removeFromFeed,
+  type FeedQuestion
+} from '@/lib/feed/store'
 
 const LOGIN_LIMIT = [{ name: 'admin-login', limit: 10, windowSeconds: 10 * 60 }]
 
@@ -106,8 +114,76 @@ export async function deleteChatAsAdmin(id: string) {
   }
   await redis.zrem(ALL_CHATS_KEY, chatKey)
   await redis.del(chatKey)
+  await removeFromFeed(id)
   revalidatePath('/admin')
+  revalidatePath('/')
   redirect('/admin')
+}
+
+export async function getFeedStatus(
+  chatId: string
+): Promise<{ entry: FeedQuestion | null; reviewed: boolean }> {
+  await requireAdmin()
+  return { entry: await getFeedEntry(chatId), reviewed: await isReviewed(chatId) }
+}
+
+export async function removeChatFromFeed(chatId: string) {
+  await requireAdmin()
+  await removeFromFeed(chatId)
+  revalidatePath('/')
+  revalidatePath(`/admin/${chatId}`)
+}
+
+/** Admin override: put the first question on the feed right away, skipping review. */
+export async function addChatToFeed(chatId: string) {
+  await requireAdmin()
+  const chat = await getChatAsAdmin(chatId)
+  const first = chat?.messages.find(m => m.role === 'user')
+  const question =
+    typeof first?.content === 'string'
+      ? first.content
+      : Array.isArray(first?.content)
+        ? first.content
+            .map(part => (part && typeof part === 'object' && 'text' in part ? String(part.text) : ''))
+            .join('')
+        : ''
+  if (!question.trim()) return
+  await addToFeed(chatId, question.trim(), chat?.createdAt.getTime(), { immediate: true })
+  revalidatePath('/')
+  revalidatePath(`/admin/${chatId}`)
+}
+
+/** Review the newest chats that were never reviewed (e.g. everything before the feed existed). */
+export async function backfillFeed(limit = 100): Promise<{ reviewed: number; published: number }> {
+  await requireAdmin()
+  const redis = await getRedisClient()
+  const keys = await redis.zrange(ALL_CHATS_KEY, 0, limit - 1, { rev: true })
+  let reviewed = 0
+  let published = 0
+  for (const key of keys) {
+    const chat = parseChat(await redis.hgetall<Record<string, any>>(key))
+    if (!chat || (await isReviewed(chat.id))) continue
+    const first = chat.messages.find(m => m.role === 'user')
+    const question =
+      typeof first?.content === 'string'
+        ? first.content
+        : Array.isArray(first?.content)
+          ? first.content
+              .map(part => (part && typeof part === 'object' && 'text' in part ? String(part.text) : ''))
+              .join('')
+          : ''
+    if (!question.trim()) continue
+    reviewed++
+    const outcome = await reviewQuestion(chat.id, question.trim())
+    if (outcome.published) published++
+  }
+  revalidatePath('/')
+  return { reviewed, published }
+}
+
+export async function backfillFeedAndRedirect() {
+  const { reviewed, published } = await backfillFeed()
+  redirect(`/admin?feed=${published}of${reviewed}`)
 }
 
 /**

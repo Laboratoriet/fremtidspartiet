@@ -32,6 +32,14 @@ AI chat for www.fremtidspartiet.no. Fork of Morphic (miurla/morphic), Next.js 15
 - `lib/actions/admin.ts` holds the server actions; every one calls `requireAdmin()` first. Transcripts render read-only via `components/admin/read-only-transcript.tsx`.
 - `convertToUIMessages` now emits `parts`; before, reloaded chats (history sidebar, share links, admin) showed questions without answers.
 
+## Public feed «Andre har spurt» (2026-09-22)
+- Shows the first question of recent chats on the empty screen, questions only, never answers. Data in `lib/feed/store.ts` (`feed:entries` zset + `feed:q:<chatId>` hashes, `feed:seen` for dedupe, `feed:reviewed` so each chat is reviewed once).
+- Review pipeline in `lib/feed/review.ts`, cheapest first: shape → duplicate → contact-detail regex → OpenAI moderation → gpt-4o-mini classifier (private persons, sensitive topics, junk; public figures allowed). Triggered with `after()` in `handle-stream-finish.ts` for every new chat, so it never delays the answer.
+- Held for `PUBLIC_FEED_DELAY_MINUTES` (default 10) before showing; `.env.local` sets 0 so tests see results at once. `ENABLE_PUBLIC_FEED=false` hides the feed and stops reviewing.
+- Notice under the input on the empty state tells users questions may be shown anonymously. Deleting a chat removes its question.
+- Admin: «Fyll forsiden» reviews the newest 100 unreviewed chats (run once after deploy); the transcript page shows feed status with «Legg på forsiden» (skips review) and «Fjern fra forsiden».
+- Tests: `node scripts/feed-smoke.mjs`, `ADMIN_PASSWORD=… python3 scripts/admin-feed-test.py`.
+
 ## Rules
 - Direkte (mode key `kort`) is the default and must stay short (2–4 sentences). Check with the smoke script after any prompt change.
 - Facts about the project come only from the prompt module; the assistant must never invent people, numbers or contact details, and never name the studio behind it.

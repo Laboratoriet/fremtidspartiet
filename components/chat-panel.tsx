@@ -47,7 +47,6 @@ export function ChatPanel({
   showScrollToBottomButton,
   scrollContainerRef
 }: ChatPanelProps) {
-  const [showEmptyScreen, setShowEmptyScreen] = useState(false)
   const router = useRouter()
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const isFirstRender = useRef(true)
@@ -163,10 +162,7 @@ export function ChatPanel({
             value={input}
             disabled={isLoading || isToolInvocationInProgress()}
             className="resize-none w-full min-h-12 bg-transparent border-0 p-4 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            onChange={e => {
-              handleInputChange(e)
-              setShowEmptyScreen(e.target.value.length === 0)
-            }}
+            onChange={handleInputChange}
             onKeyDown={e => {
               if (
                 e.key === 'Enter' &&
@@ -183,8 +179,6 @@ export function ChatPanel({
                 textarea.form?.requestSubmit()
               }
             }}
-            onFocus={() => setShowEmptyScreen(true)}
-            onBlur={() => setShowEmptyScreen(false)}
           />
 
           {/* Bottom menu area */}
@@ -236,7 +230,6 @@ export function ChatPanel({
               } as React.ChangeEvent<HTMLTextAreaElement>)
             }}
             publicQuestions={publicQuestions}
-            className={cn(showEmptyScreen ? 'visible' : 'invisible')}
           />
         )}
       </form>

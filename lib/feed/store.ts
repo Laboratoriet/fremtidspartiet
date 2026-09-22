@@ -1,4 +1,5 @@
 import { getRedisClient } from '@/lib/redis/config'
+import { exampleMessages } from './examples'
 
 /**
  * Public "Andre har spurt" feed: the first question of recent chats that
@@ -45,9 +46,25 @@ export function normaliseQuestion(question: string): string {
     .trim()
 }
 
+/** Keys a question is known by: the whole text and its first sentence. */
+export function questionKeys(question: string): string[] {
+  const full = normaliseQuestion(question)
+  const firstSentence = normaliseQuestion(question.split(/[?.!]/)[0] ?? '')
+  return firstSentence && firstSentence !== full ? [full, firstSentence] : [full]
+}
+
+const EXAMPLE_KEYS = new Set(
+  exampleMessages.flatMap(e => [...questionKeys(e.heading), ...questionKeys(e.message)])
+)
+
+/** True if this text (or an example prompt) is already shown. Check raw AND cleaned text. */
 export async function isDuplicateQuestion(question: string): Promise<boolean> {
   const redis = await getRedisClient()
-  return redis.sismember(FEED_SEEN_KEY, normaliseQuestion(question))
+  for (const key of questionKeys(question)) {
+    if (EXAMPLE_KEYS.has(key)) return true
+    if (await redis.sismember(FEED_SEEN_KEY, key)) return true
+  }
+  return false
 }
 
 export async function markReviewed(chatId: string): Promise<void> {
@@ -64,7 +81,7 @@ export async function addToFeed(
   chatId: string,
   question: string,
   createdAt = Date.now(),
-  { immediate = false } = {}
+  { immediate = false, alsoSeen = [] as string[] } = {}
 ): Promise<FeedQuestion> {
   const redis = await getRedisClient()
   const entry: FeedQuestion = {
@@ -75,7 +92,11 @@ export async function addToFeed(
   }
   await redis.hmset(entryKey(chatId), entry)
   await redis.zadd(FEED_ENTRIES_KEY, entry.visibleAt, chatId)
-  await redis.sadd(FEED_SEEN_KEY, normaliseQuestion(question))
+  for (const text of [question, ...alsoSeen]) {
+    for (const key of questionKeys(text)) {
+      await redis.sadd(FEED_SEEN_KEY, key)
+    }
+  }
   await redis.sadd(FEED_REVIEWED_KEY, chatId)
   await redis.ztrim(FEED_ENTRIES_KEY, FEED_MAX_ENTRIES)
   return entry

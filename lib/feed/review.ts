@@ -120,8 +120,9 @@ export async function reviewQuestion(
 
   const cleaned = verdict.cleaned.trim() || question.trim()
   if (shapeProblem(cleaned)) return reject('cleaned text failed shape check')
+  if (await isDuplicateQuestion(cleaned)) return reject('duplicate after cleaning')
 
-  await addToFeed(chatId, cleaned)
+  await addToFeed(chatId, cleaned, Date.now(), { alsoSeen: [question] })
   return { published: true, question: cleaned }
 }
 
